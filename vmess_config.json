@@ -1,0 +1,112 @@
+{   
+    "remarks":"",
+    
+    "stats": {},
+    "log": {
+      "loglevel": "none"
+    },
+    "policy": {
+      "levels": {
+        "8": {
+          "handshake": 4,
+          "connIdle": 300,
+          "uplinkOnly": 1,
+          "downlinkOnly": 1
+        }
+      },
+      "system": {
+        "statsOutboundUplink": true,
+        "statsOutboundDownlink": true
+      }
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true,
+          "userLevel": 8
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "protocol": "http",
+        "settings": {
+          "userLevel": 8
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vmess",
+        "settings": {
+          "vnext": [
+            {
+              "address": "xx.xx.xx.xx",
+              "port": 443,
+              "users": [
+                {
+                  "id": "xx-xx-xx-xx-xx",
+                  "alterId": 0,
+                  "security": "auto",
+                  "level": 8
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "ws",
+          "security": "tls",
+          "wsSettings": {
+            "path": "/vmess",
+            "headers": {
+              "Host": "your.host.com"
+            }
+          },
+          "tlsSettings": {
+            "allowInsecure": true,
+            "serverName": "bug.com",
+            "fingerprint": "randomized"
+          }
+        },
+        "mux": {
+          "enabled": false
+        }
+      },
+      {
+        "tag": "direct",
+        "protocol": "freedom",
+        "settings": {}
+      },
+      {
+        "tag": "block",
+        "protocol": "blackhole",
+        "settings": {
+          "response": {
+            "type": "http"
+          }
+        }
+      }
+    ],
+    "dns": {
+      "servers": [
+        "8.8.8.8"
+      ]
+    },
+    "routing": {
+      "domainStrategy": "Asls",
+      "rules": []
+    }
+  }
